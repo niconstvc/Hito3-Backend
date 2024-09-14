@@ -2,15 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-
-dotenv.config();
-
+const sequelize = require('./config/connection');
 const projectsRouter = require('./routes/projects');
 const usersRouter = require('./routes/users'); 
 const servicesRouter = require('./routes/services'); 
 const productsRouter = require('./routes/products'); 
 const authRouter = require('./routes/auth'); 
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
@@ -49,6 +48,13 @@ app.use((err, req, res, next) => {
     res.status(500).send('Algo salió mal!');
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
-});
+sequelize.sync({ alter: true })
+  .then(() => {
+    console.log('Base de datos sincronizada.');
+    app.listen(PORT, () => {
+      console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Error al sincronizar la base de datos:', err);
+  });

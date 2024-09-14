@@ -6,9 +6,7 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
 var express = require('express');
 var router = express.Router();
-var authenticateJWT = require('../middleware/authenticateJWT'); // Asegúrate de que la ruta sea correcta
-
-// Obtener todos los proyectos (Protegido)
+var authenticateJWT = require('../middleware/authenticateJWT');
 router.get('/', authenticateJWT, /*#__PURE__*/function () {
   var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
     var _yield$db$query, rows;
@@ -45,15 +43,13 @@ router.get('/', authenticateJWT, /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }());
-
-// Agregar un nuevo proyecto (Protegido)
 router.post('/', authenticateJWT, /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
     var _req$body, title, description, _yield$db$query2, rows;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          _req$body = req.body, title = _req$body.title, description = _req$body.description; // Validación básica
+          _req$body = req.body, title = _req$body.title, description = _req$body.description;
           if (!(!title || !description)) {
             _context2.next = 3;
             break;
@@ -94,8 +90,6 @@ router.post('/', authenticateJWT, /*#__PURE__*/function () {
     return _ref2.apply(this, arguments);
   };
 }());
-
-// Actualizar un proyecto (Protegido)
 router.put('/:id', authenticateJWT, /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee3(req, res) {
     var id, _req$body2, title, description, _yield$db$query3, rows;
@@ -103,7 +97,7 @@ router.put('/:id', authenticateJWT, /*#__PURE__*/function () {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           id = req.params.id;
-          _req$body2 = req.body, title = _req$body2.title, description = _req$body2.description; // Validación básica
+          _req$body2 = req.body, title = _req$body2.title, description = _req$body2.description;
           if (!(!title || !description)) {
             _context3.next = 4;
             break;
@@ -153,8 +147,6 @@ router.put('/:id', authenticateJWT, /*#__PURE__*/function () {
     return _ref3.apply(this, arguments);
   };
 }());
-
-// Eliminar un proyecto (Protegido)
 router["delete"]('/:id', authenticateJWT, /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee4(req, res) {
     var id, _yield$db$query4, rows;

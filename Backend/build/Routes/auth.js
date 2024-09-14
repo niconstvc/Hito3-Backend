@@ -9,8 +9,6 @@ var router = express.Router();
 var bcrypt = require('bcryptjs');
 var jwt = require('jsonwebtoken');
 var db = require('../database/db');
-
-// Login de usuario
 router.post('/login', /*#__PURE__*/function () {
   var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee(req, res) {
     var _req$body, username, password, _yield$db$query, rows, user, passwordMatch, token;
@@ -32,7 +30,6 @@ router.post('/login', /*#__PURE__*/function () {
             message: 'Usuario no encontrado'
           }));
         case 8:
-          // Compara la contraseña ingresada con la almacenada en la base de datos
           user = rows[0];
           _context.next = 11;
           return bcrypt.compare(password, user.password);
@@ -46,7 +43,6 @@ router.post('/login', /*#__PURE__*/function () {
             message: 'Contraseña incorrecta'
           }));
         case 14:
-          // Genera y devuelve un token JWT si la autenticación es exitosa
           token = jwt.sign({
             userId: user.id,
             username: user.username
@@ -80,8 +76,6 @@ router.post('/login', /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }());
-
-// Registro de usuario
 router.post('/register', /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee2(req, res) {
     var _req$body2, username, password, _yield$db$query2, existingUser, hashedPassword, _yield$db$query3, newUser;
