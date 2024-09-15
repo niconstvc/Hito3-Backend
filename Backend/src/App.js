@@ -7,6 +7,8 @@ const pageRouter = require("./routes/pages");
 const projectRouter = require("./routes/projects");
 const userRouter = require("./routes/users"); 
 const serviceRouter = require("./routes/services");
+const loginRouter = require('./routes/login');
+const registerRouter = require('./routes/register'); 
 
 const app = express();
 const PORT = process.env.PORT || 5000;

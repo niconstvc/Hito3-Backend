@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Biodiversidad</title>
+  <title>Crear una Cuenta - Biodiversidad</title>
   <link rel="stylesheet" href="/Frontend/Src/assets/style/Signup.css"> 
 </head>
 <body>
@@ -18,7 +18,7 @@
       <h1>Crear una Cuenta</h1>
       <p>Únete a nuestra comunidad y colabora con los mejores expertos en medio ambiente.</p>
 
-      <form id="signup-form" action="/api/users/register" method="POST">
+      <form id="signup-form">
         <label for="name">Nombre Completo</label>
         <input type="text" id="name" name="name" required>
 
@@ -38,50 +38,50 @@
     </div>
   </main>
 
-</body>
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const signupForm = document.getElementById('signup-form');
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const signupForm = document.getElementById('signup-form');
 
-  if (signupForm) {
-    signupForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
+      if (signupForm) {
+        signupForm.addEventListener('submit', async (event) => {
+          event.preventDefault();
 
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const confirmPassword = document.getElementById('confirm-password').value;
+          const name = document.getElementById('name').value;
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          const confirmPassword = document.getElementById('confirm-password').value;
 
+          if (password !== confirmPassword) {
+            alert('Las contraseñas no coinciden.');
+            return;
+          }
 
-      if (password !== confirmPassword) {
-        alert('Las contraseñas no coinciden.');
-        return;
-      }
+          try {
+            const response = await fetch('/api/users/register', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ name, email, password })
+            });
 
-      try {
-        const response = await fetch('/api/users/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ name, email, password })
+            const result = await response.json();
+
+            if (response.ok) {
+            
+              localStorage.setItem('token', result.token);
+ 
+              window.location.href = '/Frontend/Src/pages/Dashboard.html';
+            } else {
+              alert(result.message || 'Error en el registro.');
+            }
+          } catch (error) {
+            console.error('Error al registrar:', error);
+            alert('Error al registrar. Por favor, intente de nuevo.');
+          }
         });
-
-        const result = await response.json();
-
-        if (response.ok) {
-
-          window.location.href = '/src/page/dashboard.html';
-        } else {
-          alert(result.message || 'Error en el registro.');
-        }
-      } catch (error) {
-        console.error('Error al registrar:', error);
-        alert('Error al registrar. Por favor, intente de nuevo.');
       }
     });
-  }
-});
-
-</script>
+  </script>
+</body>
 </html>

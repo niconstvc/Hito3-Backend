@@ -8,6 +8,8 @@ const usersRouter = require('./routes/users');
 const servicesRouter = require('./routes/services'); 
 const productsRouter = require('./routes/products'); 
 const authRouter = require('./routes/auth'); 
+const loginRouter = require('./routes/login');
+const registerRouter = require('./routes/register'); 
 
 dotenv.config();
 const app = express();
@@ -42,6 +44,7 @@ app.use('/api/users', authenticateJWT, usersRouter);
 app.use('/api/services', authenticateJWT, servicesRouter);
 app.use('/api/products', authenticateJWT, productsRouter);
 app.use('/api/auth', authRouter); 
+app.user('/api/login', loginRouter);
 
 app.use((err, req, res, next) => {
     console.error(err.stack);

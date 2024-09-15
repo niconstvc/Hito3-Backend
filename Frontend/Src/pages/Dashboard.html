@@ -13,7 +13,7 @@
                 <a href="/index.html">biodiversidad.cl</a>
             </div>
             <div class="exit-link">
-                <a href="/index.html">Salir</a>
+                <a href="/index.html" id="logout">Salir</a>
             </div>
         </div>
     </header>
@@ -46,81 +46,94 @@
     </main>
 
     <script>
-        const uploadForm = document.getElementById('uploadForm');
-        const itemsList = document.getElementById('itemsList');
-        let items = [];
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
 
-        uploadForm.addEventListener('submit', function(event) {
-            event.preventDefault();
+            if (!token) {
+            
+                window.location.href = '/Frontend/Src/pages/Login.html';
+                return;
+            }
 
-            const name = document.getElementById('name').value;
-            const description = document.getElementById('description').value;
-            const price = document.getElementById('price').value;
-            const image = document.getElementById('image').files[0];
+            const uploadForm = document.getElementById('uploadForm');
+            const itemsList = document.getElementById('itemsList');
+            let items = [];
 
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                const newItem = {
-                    name,
-                    description,
-                    price,
-                    image: reader.result,
+            uploadForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const name = document.getElementById('name').value;
+                const description = document.getElementById('description').value;
+                const price = document.getElementById('price').value;
+                const image = document.getElementById('image').files[0];
+
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const newItem = {
+                        name,
+                        description,
+                        price,
+                        image: reader.result,
+                    };
+
+                    items.push(newItem);
+                    updateItemsList();
                 };
 
-                items.push(newItem);
-                updateItemsList();
-            };
+                if (image) {
+                    reader.readAsDataURL(image);
+                }
 
-            if (image) {
-                reader.readAsDataURL(image);
-            }
-
-            uploadForm.reset();
-        });
-
-        function updateItemsList() {
-            itemsList.innerHTML = '';
-            items.forEach((item, index) => {
-                const itemDiv = document.createElement('div');
-                itemDiv.className = 'item';
-                itemDiv.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}" />
-                    <p><strong>Nombre:</strong> ${item.name}</p>
-                    <p><strong>Descripción:</strong> ${item.description}</p>
-                    <p><strong>Precio:</strong> $${item.price}</p>
-                    <button onclick="editProduct(${index})">Editar</button>
-                    <button onclick="deleteProduct(${index})">Eliminar</button>
-                `;
-                itemsList.appendChild(itemDiv);
+                uploadForm.reset();
             });
-        }
 
-        function editProduct(index) {
-            const item = items[index];
-            document.getElementById('name').value = item.name;
-            document.getElementById('description').value = item.description;
-            document.getElementById('price').value = item.price;
-         
-            const img = document.createElement('img');
-            img.src = item.image;
-            img.alt = item.name;
-            img.className = 'preview-image';
-            const form = document.querySelector('#uploadForm');
-            form.insertBefore(img, form.querySelector('button'));
-            
-       
-            document.querySelectorAll('.preview-image').forEach(img => img.remove());
-            
-       
-            form.dataset.editIndex = index;
-        }
-
-        function deleteProduct(index) {
-            if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
-                items.splice(index, 1);
-                updateItemsList();
+            function updateItemsList() {
+                itemsList.innerHTML = '';
+                items.forEach((item, index) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'item';
+                    itemDiv.innerHTML = `
+                        <img src="${item.image}" alt="${item.name}" />
+                        <p><strong>Nombre:</strong> ${item.name}</p>
+                        <p><strong>Descripción:</strong> ${item.description}</p>
+                        <p><strong>Precio:</strong> $${item.price}</p>
+                        <button onclick="editProduct(${index})">Editar</button>
+                        <button onclick="deleteProduct(${index})">Eliminar</button>
+                    `;
+                    itemsList.appendChild(itemDiv);
+                });
             }
-        }
+
+            function editProduct(index) {
+                const item = items[index];
+                document.getElementById('name').value = item.name;
+                document.getElementById('description').value = item.description;
+                document.getElementById('price').value = item.price;
+
+                const img = document.createElement('img');
+                img.src = item.image;
+                img.alt = item.name;
+                img.className = 'preview-image';
+                const form = document.querySelector('#uploadForm');
+                form.insertBefore(img, form.querySelector('button'));
+
+                document.querySelectorAll('.preview-image').forEach(img => img.remove());
+
+                form.dataset.editIndex = index;
+            }
+
+            function deleteProduct(index) {
+                if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+                    items.splice(index, 1);
+                    updateItemsList();
+                }
+            }
+
+            document.getElementById('logout').addEventListener('click', () => {
+                localStorage.removeItem('token');
+                window.location.href = '/Frontend/Src/pages/Login.html';
+            });
+        });
     </script>
 </body>
 </html>

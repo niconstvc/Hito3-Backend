@@ -33,9 +33,6 @@
                         <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
                     </div>
                     <button type="submit" class="purple-button">Iniciar Sesión</button>
-                    <div class="instagram-signin">
-                        </button>
-                    </div>
                 </form>
             </div>
         </section>
@@ -71,7 +68,7 @@
         if (data.success) {
           alert('¡Inicio de sesión exitoso!');
           localStorage.setItem('token', data.token); 
-          window.location.href = '/Frontend/Src/dashboard.html'; 
+          window.location.href = './Dashboard.html'; 
         } else {
           alert(data.message || 'Correo electrónico o contraseña incorrectos.');
         }
@@ -80,7 +77,5 @@
         console.error('Error:', error);
       });
     });
-  </script>
-  
-  
+</script>
 </html>
